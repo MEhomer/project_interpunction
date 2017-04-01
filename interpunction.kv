@@ -1,0 +1,70 @@
+#: import main app
+#: import ListItemButton kivy.uix.listview.ListItemButton
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+
+MainMenu
+
+<Widget>:
+    font_name: './fonts/DejaVuSans.ttf'
+
+<MainMenu>:
+    TextHandler
+
+<TextHandler>:
+    orientation: 'vertical'
+
+    text_input: text_box
+    
+    TextInput:
+        id: text_box
+        focus: True
+
+    BoxLayout:
+        height: "45dp"
+        size_hint_y: None
+        Button:
+            id: process_text
+            text: 'Обработи текст'
+            on_press: root.process_text(app.root.pattern_list)
+
+        Button:
+            text: 'Подеси интерпукциски знаци'
+            on_press: app.root.change_interpunction()
+
+<InterpunctionButton>:
+    height: "45dp"
+    size_hint_y: None
+    text: u'{0}'.format(self.interpunction_sign[1])
+    on_press: app.root.select_interpunction_sign(self.interpunction_sign)
+
+<EditInterpunctionHandler>:
+    orientation: 'vertical'
+    interpunction_signs: interpunction_signs_list
+
+    BoxLayout:
+        height: "45dp"
+        size_hint_y: None
+        TextInput:
+            id: text_box
+            size_hint_x: 50
+            multiline: False
+            font_size: "30dp"
+        Button:
+            size_hint_x: 25
+            text: 'Додади'
+            on_press: app.root.add_interpunction_sing(text_box.text)
+        Button:
+            size_hint_x: 25
+            text: 'Избриши'
+            on_press: app.root.delete_interpunction_sing()
+
+    ListView:
+        id: interpunction_signs_list
+        adapter:
+            ListAdapter(data=[], cls=main.InterpunctionButton, args_converter=app.root.args_converter)
+
+    Button:
+        height: "45dp"
+        size_hint_y: None
+        text: 'Назад'
+        on_press: app.root.open_text_handler()
