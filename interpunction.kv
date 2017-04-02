@@ -19,17 +19,21 @@ MainMenu
         id: text_box
         focus: True
 
+    Button:
+        id: process_text
+        height: "45dp"
+        size_hint_y: None
+        text: 'Обработи текст'
+        on_press: root.process_text(app.root.pattern_list, app.root.word_token)
+
     BoxLayout:
         height: "45dp"
         size_hint_y: None
-        Button:
-            id: process_text
-            text: 'Обработи текст'
-            on_press: root.process_text(app.root.pattern_list)
+        orientation: 'horizontal'
 
         Button:
-            text: 'Подеси интерпукциски знаци'
-            on_press: app.root.change_interpunction()
+            text: 'Подесување'
+            on_press: app.root.change_configuration()
 
 <InterpunctionButton>:
     height: "45dp"
@@ -37,9 +41,10 @@ MainMenu
     text: u'{0}'.format(self.interpunction_sign[1])
     on_press: app.root.select_interpunction_sign(self.interpunction_sign)
 
-<EditInterpunctionHandler>:
+<ConfigurationHandler>:
     orientation: 'vertical'
     interpunction_signs: interpunction_signs_list
+    text_box: text_box_input
 
     BoxLayout:
         height: "45dp"
@@ -63,8 +68,23 @@ MainMenu
         adapter:
             ListAdapter(data=[], cls=main.InterpunctionButton, args_converter=app.root.args_converter)
 
+    BoxLayout:
+        height: "45dp"
+        size_hint_y: None
+        orientation: 'horizontal'
+        TextInput:
+            id: text_box_input
+            size_hint_x: 50
+            multiline: False
+            font_size: "30dp"
+        Button:
+            size_hint_x: 50
+            text: 'Зачувај'
+            on_press: app.root.change_word_token(text_box_input.text)
+
     Button:
         height: "45dp"
         size_hint_y: None
         text: 'Назад'
         on_press: app.root.open_text_handler()
+

@@ -5,26 +5,28 @@ from knuth_moriss_pratt import knp_iterator
 
 PATTERN_LIST = [u'.', u'?', u'!', u',', u';', u':', u'...', u'(', u')', u' − ', u' - ', u'„', u'“', u'’',
                 u'‘', u'-', u'/', u'*', u' ', u'−', u'–', u'¹', u'²', u'³', u'⁴', u'⁵', u'⁶', u'⁷',
-                u'⁸', u'\u2079', u'=', u'+', u'-', u'знак за помножено тука', u'>', u'<', u'\u2264',
-                u'\u2265', u'%', u'знак за степен', u'~', u'§', u'@']
+                u'⁸', u'\u2079', u'=', u'+', u'-', u'\u00D7', u'>', u'<', u'\u2264',
+                u'\u2265', u'%', u'\u00B0', u'~', u'§', u'@']
+
+
+WORD_TOKEN = u'_'
 
 
 class ProcessText(object):
     """Process text by removing characters."""
 
-    def __init__(self, text, pattern_list):
+    def __init__(self, text, pattern_list, word_token):
         """
         Initialize ProcessText.
 
         :param text: The text to be processed.
         :type text: unicode
-        :param ignore_list: A list of string to be ignored when processing the text.
-        :type ignore_list: list
         """
         super(ProcessText, self).__init__()
 
         self.text = text
         self.pattern_list = pattern_list
+        self.word_token = word_token
         self.matches = []
 
     def process(self):
@@ -46,12 +48,12 @@ class ProcessText(object):
                 else:
                     if chars_to_delete > 0:
                         chars_to_delete = 0
-                        new_list_text.append(u'_')
+                        new_list_text.append(self.word_token)
 
                     new_list_text.append(list_text[index])
 
             if chars_to_delete > 0:
-                new_list_text.append(u'_')
+                new_list_text.append(self.word_token)
 
             text_lines[line_index] = ''.join(new_list_text)
 

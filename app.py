@@ -4,12 +4,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.factory import Factory
-from kivy import Config
 
 import process_text
-
-
-Config.set('graphics', 'multisamples', '0')
 
 
 class TextHandler(BoxLayout):
@@ -17,15 +13,15 @@ class TextHandler(BoxLayout):
 
     text_input = ObjectProperty()
 
-    def process_text(self, pattern_list):
+    def process_text(self, pattern_list, word_token):
         """`on_press` handler for button."""
         text = self.text_input.text
-        processor = process_text.ProcessText(text, pattern_list)
+        processor = process_text.ProcessText(text, pattern_list, word_token)
 
         self.text_input.text = processor.process()
 
 
-class EditInterpunctionHandler(BoxLayout):
+class ConfigurationHandler(BoxLayout):
     """View for editing interpunction signs."""
 
     pass
@@ -48,18 +44,26 @@ class MainMenu(BoxLayout):
         super(MainMenu, self).__init__(**kwargs)
 
         self.pattern_list = process_text.PATTERN_LIST
+        self.word_token = process_text.WORD_TOKEN
         self.selected_interpunction_sign = None
 
-    def change_interpunction(self):
+    def change_configuration(self):
         """`on_press` handler for button."""
         self.clear_widgets()
 
-        edit_interpunction_handler = Factory.EditInterpunctionHandler()
+        configuration_handler = Factory.ConfigurationHandler()
 
-        del edit_interpunction_handler.interpunction_signs.adapter.data[:]
-        edit_interpunction_handler.interpunction_signs.adapter.data.extend(self.pattern_list)
+        del configuration_handler.interpunction_signs.adapter.data[:]
+        configuration_handler.interpunction_signs.adapter.data.extend(self.pattern_list)
+        configuration_handler.text_box.text = self.word_token
 
-        self.add_widget(edit_interpunction_handler)
+        self.add_widget(configuration_handler)
+
+    def change_word_token(self, word_token):
+        """`on_press` handler for changing word token."""
+        self.word_token = word_token
+
+        self.change_configuration()
 
     def open_text_handler(self):
         """`on_press` handler for button."""
@@ -83,13 +87,13 @@ class MainMenu(BoxLayout):
             del self.pattern_list[self.selected_interpunction_sign[0]]
             self.selected_interpunction_sign = None
 
-            self.change_interpunction()
+            self.change_configuration()
 
     def add_interpunction_sing(self, text):
         """`on_press` handler for adding interpunction sign button is pressed."""
         self.pattern_list.insert(0, text)
 
-        self.change_interpunction()
+        self.change_configuration()
 
     def args_converter(self, index, data_item):
         """Convert the data that it is coming in the ListViewAdapter."""
