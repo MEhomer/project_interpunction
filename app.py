@@ -4,8 +4,11 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.factory import Factory
+from kivy import Config
 
 import process_text
+
+Config.set('graphics', 'multisamples', '0')
 
 
 class TextHandler(BoxLayout):
