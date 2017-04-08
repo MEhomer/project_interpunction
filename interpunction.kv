@@ -15,7 +15,7 @@ MainMenu
 
     text_input: text_box
     
-    TextInput:
+    RightClickFunctionalityTextBox:
         id: text_box
         focus: True
 
@@ -49,7 +49,7 @@ MainMenu
     BoxLayout:
         height: "45dp"
         size_hint_y: None
-        TextInput:
+        RightClickFunctionalityTextBox:
             id: text_box
             size_hint_x: 50
             multiline: False
@@ -72,7 +72,7 @@ MainMenu
         height: "45dp"
         size_hint_y: None
         orientation: 'horizontal'
-        TextInput:
+        RightClickFunctionalityTextBox:
             id: text_box_input
             size_hint_x: 50
             multiline: False
@@ -88,3 +88,18 @@ MainMenu
         text: 'Назад'
         on_press: app.root.open_text_handler()
 
+<CopyPastePopup>:
+    title: 'Copy/Paste'
+    id: cpopup
+    size_hint: .25, .25
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Button:
+            text: 'Copy'
+            on_press: root.copy_press()
+
+        Button:
+            text: 'Paste'
+            on_press: root.paste_press()

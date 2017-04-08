@@ -1,6 +1,8 @@
 """Interpunction Application."""
 from kivy.app import App
+from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.factory import Factory
@@ -8,7 +10,9 @@ from kivy import Config
 
 import process_text
 
+
 Config.set('graphics', 'multisamples', '0')
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 
 class TextHandler(BoxLayout):
@@ -34,6 +38,41 @@ class InterpunctionButton(ListItemButton):
     """Interpunction button."""
 
     interpunction_sign = ListProperty()
+
+
+class CopyPastePopup(Popup):
+    """Copy Paste Popup."""
+
+    def __init__(self, text_input, **kwargs):
+        """Initialize the CopyPastePopup."""
+        super(CopyPastePopup, self).__init__(**kwargs)
+
+        self.text_input = text_input
+
+    def copy_press(self):
+        """Event when the copy button is pressed."""
+        print self.text_input.selection_text
+        self.text_input.copy(data=self.text_input.selection_text)
+
+        self.dismiss()
+
+    def paste_press(self):
+        """Event when the paste button is pressed."""
+        self.text_input.paste()
+
+        self.dismiss()
+
+
+class RightClickFunctionalityTextBox(TextInput):
+    """Special text input for handling mouse right click."""
+
+    def on_touch_down(self, touch):
+        """On touch down event for every text input."""
+        if touch.button == 'right':
+            popup = CopyPastePopup(self)
+            popup.open()
+        else:
+            super(RightClickFunctionalityTextBox, self).on_touch_down(touch)
 
 
 class MainMenu(BoxLayout):
