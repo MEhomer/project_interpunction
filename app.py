@@ -51,7 +51,6 @@ class CopyPastePopup(Popup):
 
     def copy_press(self):
         """Event when the copy button is pressed."""
-        print self.text_input.selection_text
         self.text_input.copy(data=self.text_input.selection_text)
 
         self.dismiss()
